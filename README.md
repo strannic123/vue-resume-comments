@@ -1,5 +1,9 @@
 # vue-resume-app
 
+# Конструктор резюме на Vue 3
+# Использовался axios для загрузки комментариев 
+## ![Imgur](https://i.imgur.com/nrMJyEw.gif)
+
 ## Project setup
 ```
 npm install
