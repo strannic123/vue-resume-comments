@@ -1,26 +1,78 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container column">
+
+    <app-select-block @blockAdded="addBlock" />
+    <app-body-resume :blocks="blocks"/>
+  </div>
+  <div class="container">
+    <AppLoader v-if="loader"/>
+    <app-comments
+        @loadComments="loadComments"
+        :comments="comments"
+        :loader="loader"
+    />
+  </div>
+
+
+
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AppSelectBlock from "@/components/AppSelectBlock";
+import AppBodyResume from "@/components/AppBodyResume";
+import AppComments from "@/components/AppComments";
+import AppLoader from "@/components/AppLoader";
+
+import axios from 'axios'
+
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      blocks: [],
+      comments: [],
+      loader: false
+    }
+  },
   components: {
-    HelloWorld
-  }
+    AppSelectBlock,
+    AppBodyResume,
+    AppComments,
+    AppLoader
+  },
+
+  methods: {
+    addBlock(block) {
+      this.blocks.push(block)
+    },
+    async loadComments() {
+      this.loader = true
+      const {data} = await axios.get('https://jsonplaceholder.typicode.com/comments?_limit=42')
+      if (!data){
+        throw new Error('Произошла ошибка')
+      }else {
+        this.comments = data
+        this.loader = false
+      }
+
+     console.log( typeof this.comments)
+    }
+  },
+
 }
 </script>
 
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  .avatar {
+    display: flex;
+    justify-content: center;
+  }
+
+  .avatar img {
+    width: 150px;
+    height: auto;
+    border-radius: 50%;
+  }
 </style>
